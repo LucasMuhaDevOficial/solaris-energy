@@ -1,14 +1,16 @@
 import { Fragment } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 
 import logoImage from '../assets/logoImage.svg'
+import { useAuth } from '../hooks/useAuth'
 
 export function TopBar() {
   const location = useLocation()
+  const { signOut } = useAuth()
 
   const user = {
     name: 'Tony Stark',
@@ -32,7 +34,7 @@ export function TopBar() {
   const userNavigation = [
     { name: 'Seu perfil', href: '#' },
     { name: 'Configurações', href: '#' },
-    { name: 'Sair', href: '/signin' },
+    { name: 'Sair', href: '/signin', onClick: () => signOut() },
   ]
 
   return (
@@ -119,6 +121,7 @@ export function TopBar() {
                                         ['bg-orange-100']: active,
                                       }
                                     )}
+                                    onClick={item.onClick}
                                   >
                                     {item.name}
                                   </NavLink>

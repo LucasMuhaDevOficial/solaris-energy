@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 
@@ -10,21 +10,20 @@ import { useAuth } from '../hooks/useAuth'
 export function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
 
   const { signIn, isLogging } = useAuth()
 
-  function handleSignIn(e: FormEvent) {
+  const navigate = useNavigate()
+
+  async function handleSignIn(e: FormEvent) {
     e.preventDefault()
     signIn(email, password)
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      if (isLogging) {
-        navigate('/')
-      }
-    }, 1000)
+    if (isLogging) {
+      navigate('/')
+    }
   }, [isLogging, navigate])
 
   return (

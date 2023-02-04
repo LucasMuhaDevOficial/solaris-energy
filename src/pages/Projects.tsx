@@ -1,4 +1,4 @@
-export function Home() {
+export function Projects() {
   return (
     <div className="min-h-full">
       <header className="bg-white shadow">
