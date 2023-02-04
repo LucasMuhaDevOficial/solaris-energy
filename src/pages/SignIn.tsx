@@ -1,6 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
 
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 
@@ -127,7 +126,6 @@ export function SignIn() {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   )
 }
