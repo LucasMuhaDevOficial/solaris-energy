@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
@@ -68,6 +68,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem(USERS_COLLECTION)
     setUser(null)
   }
+
+  useEffect(() => {
+    getUserFromStorage()
+  }, [])
 
   return (
     <AuthContext.Provider
