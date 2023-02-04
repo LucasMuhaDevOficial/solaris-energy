@@ -11,6 +11,8 @@
     "lint:fix": "eslint src --fix .tsx,.ts"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.9",
+    "@heroicons/react": "^2.0.14",
     "clsx": "^1.2.1",
     "firebase": "^9.17.1",
     "phosphor-react": "^1.4.1",
