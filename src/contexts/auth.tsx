@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useState } from 'react'
-import { toast } from 'react-toastify'
 
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
@@ -28,7 +27,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return account
       })
       .catch((error) => {
-        const codeError = error.code
         console.log(error)
       })
       .finally(() => setIsLogging(false))

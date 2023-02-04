@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
-import { CircleNotch } from 'phosphor-react'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 
 import logoImage from '../assets/logoImage.svg'
 import { useAuth } from '../hooks/useAuth'
@@ -29,7 +29,7 @@ export function SignIn() {
 
   return (
     <>
-      <div className="w-full h-screen bg-cover bg-center bg-no-repeat bg-signin-pattern bg-zinc-100">
+      <div className="w-full h-screen bg-center bg-no-repeat bg-cover bg-signin-pattern bg-zinc-100">
         <div className="flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
           <div className="w-full max-w-md space-y-8">
             <div>
@@ -111,15 +111,13 @@ export function SignIn() {
               <div>
                 <button
                   type="submit"
-                  className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md group hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-colors"
+                  className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white transition-colors bg-orange-600 border border-transparent rounded-md group hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                 >
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3"></span>
                   {isLogging ? (
-                    <CircleNotch
-                      size={24}
+                    <ArrowPathIcon
                       color="#fff"
-                      weight="fill"
-                      className="animate-spin"
+                      className="h-5 animate-spin w-h-5"
                     />
                   ) : (
                     'Login'
