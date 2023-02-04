@@ -8,7 +8,6 @@ import { clsx } from 'clsx'
 import logoImage from '../assets/logoImage.svg'
 
 export function TopBar() {
-  const navigate = useNavigate()
   const location = useLocation()
 
   const user = {
@@ -49,7 +48,7 @@ export function TopBar() {
                       <img
                         className="w-8 h-8"
                         src={logoImage}
-                        alt="Your Company"
+                        alt="Solaris Energy"
                       />
                     </div>
                     <div className="hidden md:block">
@@ -112,8 +111,8 @@ export function TopBar() {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
+                                  <NavLink
+                                    to={item.href}
                                     className={clsx(
                                       'block px-4 py-2 text-sm text-gray-700',
                                       {
@@ -122,7 +121,7 @@ export function TopBar() {
                                     )}
                                   >
                                     {item.name}
-                                  </a>
+                                  </NavLink>
                                 )}
                               </Menu.Item>
                             ))}
