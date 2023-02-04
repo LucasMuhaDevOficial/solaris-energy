@@ -21,7 +21,7 @@ export function SignIn() {
 
   useEffect(() => {
     if (isLogging) {
-      navigate('/')
+      navigate('/projects')
     }
   }, [isLogging, navigate])
 

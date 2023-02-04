@@ -20,11 +20,6 @@ export function TopBar() {
 
   const navigation = [
     {
-      name: 'Home',
-      href: '/',
-      current: location.pathname === '/' ? true : false,
-    },
-    {
       name: 'Projetos',
       href: '/projects',
       current: location.pathname === '/projects' ? true : false,
