@@ -9,7 +9,7 @@ import logoImage from '../assets/logoImage.svg'
 import { useAuth } from '../hooks/useAuth'
 
 export function TopBar() {
-  const location = useLocation()
+  const { pathname } = useLocation()
   const { signOut } = useAuth()
 
   const user = {
@@ -22,12 +22,12 @@ export function TopBar() {
     {
       name: 'Projetos',
       href: '/projects',
-      current: location.pathname === '/projects' ? true : false,
+      current: pathname === '/projects' ? true : false,
     },
     {
       name: 'Usuários',
       href: '/users',
-      current: location.pathname === '/users' ? true : false,
+      current: pathname === '/users' ? true : false,
     },
   ]
 

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { DefaultLayout } from '../layouts/DefaultLayout'
 import { Projects } from '../pages/Projects'
@@ -13,6 +13,7 @@ export function AppRoutes() {
       <Route path="/signin" element={<SignIn />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/" element={<DefaultLayout />}>
+          <Route path="/" element={<Navigate to="/projects" replace />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/users" element={<Users />} />
         </Route>
