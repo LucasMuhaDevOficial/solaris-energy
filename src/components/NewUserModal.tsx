@@ -1,9 +1,82 @@
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
-interface NewUserModalProps {}
+import { useUsers } from '../hooks/useUsers'
+import { apiZipCode } from '../libs/axios'
+import { capitalizeString } from '../utils/capitalizeString'
+import {
+  maskCpfNumber,
+  maskPhoneNumber,
+  maskZipCode,
+  removeMask,
+} from '../utils/maskInputs'
+
+interface NewUserModalFields {
+  name: string
+  cpf: string
+  phoneNumber: string
+  email: string
+  zipcode: string
+  state: string
+  city: string
+  street: string
+  neighborhood: string
+  number: number
+  complement: string
+}
+
+interface Address {
+  uf: string
+  localidade: string
+  logradouro: string
+  complemento: string
+  bairro: string
+}
 
 export function NewUserModal() {
+  const { states } = useUsers()
+
+  const { register, handleSubmit, reset, watch, setValue } =
+    useForm<NewUserModalFields>()
+
+  function onSubmit(data: NewUserModalFields) {
+    console.log(data)
+    reset()
+  }
+
+  const phoneValue = watch('phoneNumber', '')
+  const zipCodeValue = watch('zipcode', '')
+  const cpfValue = watch('cpf', '')
+
+  useEffect(() => {
+    async function handleCepNumber(zipCode: string) {
+      setValue('zipcode', maskZipCode(zipCodeValue))
+
+      if (removeMask(zipCode).length === 8) {
+        const response = await apiZipCode.get(`/${zipCode}/json`)
+
+        const { complemento, localidade, logradouro, uf, bairro } =
+          response.data as Address
+
+        setValue('city', localidade)
+        setValue('neighborhood', bairro)
+        setValue('state', uf)
+        setValue('street', logradouro)
+        setValue('complement', capitalizeString(complemento))
+      }
+    }
+
+    handleCepNumber(zipCodeValue)
+  }, [setValue, zipCodeValue])
+
+  useEffect(() => {
+    setValue('phoneNumber', maskPhoneNumber(phoneValue))
+    setValue('cpf', maskCpfNumber(cpfValue))
+  }, [setValue, phoneValue, cpfValue])
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 w-screen h-screen bg-black bg-opacity-80" />
@@ -13,22 +86,23 @@ export function NewUserModal() {
           <XMarkIcon className="w-5 h-5" />
         </Dialog.Close>
 
-        <form action="#" method="POST" className="flex flex-col gap-4 mt-8">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 mt-8"
+        >
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-6">
               <label
-                htmlFor="first-name"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                 Nome Completo:
               </label>
               <input
                 type="text"
-                name="full-name"
-                id="full-name"
-                autoFocus
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
-                placeholder="Simon"
+                placeholder="Simon Wenberg"
+                {...register('name')}
               />
             </div>
 
@@ -41,10 +115,10 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="cpf"
                 id="cpf"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="000.000.000-00"
+                {...register('cpf')}
               />
             </div>
 
@@ -57,27 +131,26 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="phone-number"
                 id="phone-number"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="(00) 00000-0000"
+                {...register('phoneNumber')}
               />
             </div>
 
             <div className="col-span-6 sm:col-span-6">
               <label
-                htmlFor="email-address"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Email:
               </label>
               <input
                 type="email"
-                name="email-address"
-                id="email-address"
-                autoComplete="email"
+                id="email"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="simon@gmail.com"
+                {...register('email')}
               />
             </div>
 
@@ -90,10 +163,9 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="zipcode"
-                id="zipcode"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="00000-000"
+                {...register('zipcode')}
               />
             </div>
 
@@ -106,12 +178,12 @@ export function NewUserModal() {
               </label>
               <select
                 id="state"
-                name="state"
-                className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500"
+                className="w-full p-1 mt-1 border-b-2 outline-none cursor-pointer border-orange-500/50 focus:border-orange-500"
+                {...register('state')}
               >
-                <option>CE</option>
-                <option>PI</option>
-                <option>MS</option>
+                {states.map((state) => (
+                  <option key={state.id}>{state.sigla}</option>
+                ))}
               </select>
             </div>
 
@@ -124,11 +196,11 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="city"
                 id="city"
                 autoComplete="city"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
-                placeholder="Rua Coronel Henrique Rodrigues"
+                placeholder="Sobral"
+                {...register('city')}
               />
             </div>
 
@@ -141,11 +213,11 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="street"
                 id="street"
                 autoComplete="street"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="Rua Coronel Henrique Rodrigues"
+                {...register('street')}
               />
             </div>
 
@@ -158,11 +230,11 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="neighborhood"
                 id="neighborhood"
                 autoComplete="neighborhood"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="Centro"
+                {...register('neighborhood')}
               />
             </div>
 
@@ -175,10 +247,10 @@ export function NewUserModal() {
               </label>
               <input
                 type="number"
-                name="number"
                 id="number"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="000"
+                {...register('number')}
               />
             </div>
 
@@ -191,10 +263,10 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
-                name="complement"
                 id="complement"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="Ex.: apt. 42"
+                {...register('complement')}
               />
             </div>
           </div>
