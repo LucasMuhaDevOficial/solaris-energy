@@ -1,3 +1,4 @@
+import { BigHead } from '@bigheads/core'
 import {
   TrashIcon,
   PencilIcon,
@@ -53,11 +54,7 @@ export function UsersTable() {
                   <tr key={user.id} className="hover:bg-gray-50">
                     <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                       <div className="relative w-10 h-10">
-                        <img
-                          className="object-cover object-center w-full h-full rounded-full"
-                          src={`https://source.unsplash.com/random/300x300/?${user.name}`}
-                          alt=""
-                        />
+                        <BigHead />
                       </div>
 
                       <div className="text-sm" key={user.cpf}>

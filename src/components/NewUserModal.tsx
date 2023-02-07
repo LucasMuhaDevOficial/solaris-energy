@@ -38,7 +38,7 @@ interface Address {
 }
 
 export function NewUserModal() {
-  const { states, createUsers, users } = useUsers()
+  const { states, createUsers, users, isFetched } = useUsers()
 
   const {
     register,
@@ -46,8 +46,12 @@ export function NewUserModal() {
     reset,
     watch,
     setValue,
-    formState: { isSubmitting, isSubmitSuccessful },
-  } = useForm<NewUserModalFields>()
+    formState: { isSubmitSuccessful },
+  } = useForm<NewUserModalFields>({
+    defaultValues: {
+      state: 'CE',
+    },
+  })
 
   const nameValue = watch('name', '')
   const phoneValue = watch('phone', '')
@@ -58,7 +62,7 @@ export function NewUserModal() {
     const existingCpfUser = users.find((user) => user.cpf === cpfValue)
 
     if (nameValue.length === 0) {
-      toast.error('Insira pelo ao menos um nome para identificação!')
+      toast.error('Insira pelo menos um nome para identificação!')
       return
     }
 
@@ -107,6 +111,19 @@ export function NewUserModal() {
 
   return (
     <Dialog.Portal>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <Dialog.Overlay className="fixed inset-0 w-screen h-screen bg-black bg-opacity-80" />
 
       <Dialog.Content className="md:min-w-[42rem] md:min-h-[32rem] fixed top-1/2 left-1/2 -translate-x-1/2 w-screen md:w-auto -translate-y-1/2 md:px-10 md:py-4 bg-white md:rounded-md  h-screen md:h-auto p-10 overflow-auto md:overflow-auto">
@@ -303,7 +320,7 @@ export function NewUserModal() {
               type="submit"
               className="flex justify-center px-8 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:border-orange-500"
             >
-              {isSubmitting ? (
+              {isFetched ? (
                 <ArrowPathIcon
                   color="#fff"
                   className="h-5 animate-spin w-h-5"
@@ -315,18 +332,6 @@ export function NewUserModal() {
           </div>
         </form>
       </Dialog.Content>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </Dialog.Portal>
   )
 }
