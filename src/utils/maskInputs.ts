@@ -7,18 +7,9 @@ function maskPhoneNumber(phoneNumber: string) {
     maskedPhoneNumber = ''
   } else if (maskedPhoneNumber.length < 4) {
     maskedPhoneNumber = '(' + maskedPhoneNumber
-  } else if (maskedPhoneNumber.length === 4) {
-    maskedPhoneNumber = '(' + maskedPhoneNumber + ')'
   } else if (maskedPhoneNumber.length < 8) {
     maskedPhoneNumber =
       '(' + maskedPhoneNumber.slice(0, 2) + ') ' + maskedPhoneNumber.slice(2)
-  } else if (maskedPhoneNumber.length === 8) {
-    maskedPhoneNumber =
-      '(' +
-      maskedPhoneNumber.slice(0, 2) +
-      ') ' +
-      maskedPhoneNumber.slice(2) +
-      '-'
   } else {
     maskedPhoneNumber =
       '(' +

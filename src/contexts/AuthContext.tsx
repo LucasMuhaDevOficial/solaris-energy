@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
 
 import { USERS_COLLECTION } from '../constants/storage'
 import { auth } from '../services/firebase'
@@ -29,44 +29,51 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>()
 
   function getUserFromStorage() {
-    setIsLogging(true)
+    try {
+      const storedUser = localStorage.getItem(USERS_COLLECTION)
 
-    const storedUser = localStorage.getItem(USERS_COLLECTION)
-
-    if (storedUser) {
-      const userData = JSON.parse(storedUser) as User
-      setUser(userData)
+      if (storedUser) {
+        const userData = JSON.parse(storedUser) as User
+        setUser(userData)
+      }
+    } catch (error) {
+      console.log(error)
     }
-
-    setIsLogging(false)
   }
 
-  function signIn(email: string, password: string) {
+  async function signIn(email: string, password: string) {
     setIsLogging(true)
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((account) => {
-        const { uid, email } = account.user
+    const account = await signInWithEmailAndPassword(auth, email, password)
 
-        const userData = {
-          uid: uid,
-          email: email,
-        }
+    try {
+      const { uid, email } = account.user
 
-        setUser(userData)
-        localStorage.setItem(USERS_COLLECTION, JSON.stringify(userData))
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-      .finally(() => setIsLogging(false))
+      const userData = {
+        uid: uid,
+        email: email,
+      }
+
+      console.log(userData)
+
+      setUser(userData)
+      localStorage.setItem(USERS_COLLECTION, JSON.stringify(userData))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function signOut() {
-    await auth.signOut()
+    try {
+      setIsLogging(false)
 
-    localStorage.removeItem(USERS_COLLECTION)
-    setUser(null)
+      await auth.signOut()
+
+      localStorage.removeItem(USERS_COLLECTION)
+      setUser(null)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
