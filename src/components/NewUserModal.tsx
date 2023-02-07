@@ -53,18 +53,12 @@ export function NewUserModal() {
     },
   })
 
-  const nameValue = watch('name', '')
   const phoneValue = watch('phone', '')
   const zipCodeValue = watch('zipcode', '')
   const cpfValue = watch('cpf', '')
 
   function onSubmit(data: NewUserModalFields) {
     const existingCpfUser = users.find((user) => user.cpf === cpfValue)
-
-    if (nameValue.length === 0) {
-      toast.error('Insira pelo menos um nome para identificação!')
-      return
-    }
 
     if (existingCpfUser) {
       toast.warn('Já existe um usuário com esse CPF!')
@@ -105,9 +99,12 @@ export function NewUserModal() {
   }, [setValue, zipCodeValue])
 
   useEffect(() => {
-    setValue('phone', maskPhoneNumber(phoneValue))
     setValue('cpf', maskCpfNumber(cpfValue))
   }, [setValue, phoneValue, cpfValue])
+
+  useEffect(() => {
+    setValue('phone', maskPhoneNumber(phoneValue))
+  }, [phoneValue, setValue])
 
   return (
     <Dialog.Portal>

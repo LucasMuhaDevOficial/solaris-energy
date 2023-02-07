@@ -14,7 +14,7 @@ export function SignIn() {
 
   const navigate = useNavigate()
 
-  async function handleSignIn(e: FormEvent) {
+  async function handleSignIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     signIn(email, password)
   }
