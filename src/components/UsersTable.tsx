@@ -1,4 +1,8 @@
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
+import {
+  TrashIcon,
+  PencilIcon,
+  ExclamationCircleIcon,
+} from '@heroicons/react/24/outline'
 
 import { useUsers } from '../hooks/useUsers'
 import { Loading } from './Loading'
@@ -10,6 +14,16 @@ export function UsersTable() {
     <>
       {isFetched ? (
         <Loading />
+      ) : users.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-4 py-28">
+          <ExclamationCircleIcon className="w-16 h-16 text-orange-500" />
+          <div className="flex flex-col items-center">
+            <strong className="text-orange-500">
+              Sem usuários no momento!
+            </strong>
+            <span>Cadastre um agora clicando no botão acima.</span>
+          </div>
+        </div>
       ) : (
         <div className="mt-5 overflow-hidden overflow-x-auto border border-gray-200 rounded-lg shadow-md">
           <table className="w-full text-sm text-left text-gray-500 bg-white">
@@ -66,7 +80,7 @@ export function UsersTable() {
                         >
                           <TrashIcon className="w-6 h-6" />
                         </button>
-                        <button>
+                        <button title="Atualizar">
                           <PencilIcon className="w-6 h-6" />
                         </button>
                       </div>

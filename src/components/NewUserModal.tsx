@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast, ToastContainer } from 'react-toastify'
 
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { useUsers } from '../hooks/useUsers'
@@ -14,7 +15,7 @@ import {
   removeMask,
 } from '../utils/maskInputs'
 
-export interface NewUserModalFields {
+interface NewUserModalFields {
   name: string
   cpf: string
   phone: string
@@ -37,19 +38,46 @@ interface Address {
 }
 
 export function NewUserModal() {
-  const { states } = useUsers()
+  const { states, createUsers, users } = useUsers()
 
-  const { register, handleSubmit, reset, watch, setValue } =
-    useForm<NewUserModalFields>()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { isSubmitting, isSubmitSuccessful },
+  } = useForm<NewUserModalFields>()
 
-  function onSubmit(data: NewUserModalFields) {
-    console.log(data)
-    reset()
-  }
-
+  const nameValue = watch('name', '')
   const phoneValue = watch('phone', '')
   const zipCodeValue = watch('zipcode', '')
   const cpfValue = watch('cpf', '')
+
+  function onSubmit(data: NewUserModalFields) {
+    const existingCpfUser = users.find((user) => user.cpf === cpfValue)
+
+    if (nameValue.length === 0) {
+      toast.error('Insira pelo ao menos um nome para identificação!')
+      return
+    }
+
+    if (existingCpfUser) {
+      toast.warn('Já existe um usuário com esse CPF!')
+      return
+    }
+
+    createUsers({
+      id: crypto.randomUUID(),
+      ...data,
+    })
+
+    if (isSubmitSuccessful) {
+      toast.success('Usuário cadastrado com sucesso!')
+    }
+
+    reset()
+  }
 
   useEffect(() => {
     async function handleCepNumber(zipCode: string) {
@@ -275,11 +303,30 @@ export function NewUserModal() {
               type="submit"
               className="flex justify-center px-8 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:border-orange-500"
             >
-              Salvar
+              {isSubmitting ? (
+                <ArrowPathIcon
+                  color="#fff"
+                  className="h-5 animate-spin w-h-5"
+                />
+              ) : (
+                'Salvar'
+              )}
             </button>
           </div>
         </form>
       </Dialog.Content>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Dialog.Portal>
   )
 }
