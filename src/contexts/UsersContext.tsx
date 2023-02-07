@@ -1,15 +1,7 @@
-import { createContext, ReactNode } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction } from 'react'
 import { useEffect, useState } from 'react'
 
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  DocumentData,
-  getDocs,
-  onSnapshot,
-} from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 
 import { apiStates } from '../libs/axios'
 import { db } from '../services/firebase'
@@ -18,7 +10,7 @@ interface UsersContextType {
   states: IStates[]
   users: IUsers[]
   isFetched: boolean
-  deleteUsersFromDB: (userCpf: string) => void
+  deleteUser: (userId: string) => void
   createUsers: (data: IUsers) => void
 }
 
@@ -65,7 +57,7 @@ export function UsersProvider({ children }: UsersProviderProps) {
     }
   }
 
-  async function deleteUsersFromDB(userId: string) {
+  async function deleteUser(userId: string) {
     try {
       setIsFetched(true)
 
@@ -83,7 +75,7 @@ export function UsersProvider({ children }: UsersProviderProps) {
     }
   }
 
-  async function fetchUsersFromDB() {
+  async function getUsers() {
     try {
       setIsFetched(true)
 
@@ -113,12 +105,18 @@ export function UsersProvider({ children }: UsersProviderProps) {
 
   useEffect(() => {
     handleStatesApi()
-    fetchUsersFromDB()
+    getUsers()
   }, [])
 
   return (
     <UsersContext.Provider
-      value={{ states, users, isFetched, deleteUsersFromDB, createUsers }}
+      value={{
+        states,
+        users,
+        isFetched,
+        deleteUser,
+        createUsers,
+      }}
     >
       {children}
     </UsersContext.Provider>

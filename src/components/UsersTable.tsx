@@ -1,15 +1,19 @@
+import { useEffect } from 'react'
+
 import { BigHead } from '@bigheads/core'
 import {
   TrashIcon,
   PencilIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline'
+import * as Dialog from '@radix-ui/react-dialog'
 
 import { useUsers } from '../hooks/useUsers'
 import { Loading } from './Loading'
+import { NewUserModal } from './NewUserModal'
 
 export function UsersTable() {
-  const { users, isFetched, deleteUsersFromDB } = useUsers()
+  const { users, isFetched, deleteUser } = useUsers()
 
   return (
     <>
@@ -69,19 +73,22 @@ export function UsersTable() {
                     <td className="px-6 py-4">
                       <div className="flex gap-2">{user.phone}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex justify-end gap-4">
-                        <button
-                          onClick={() => deleteUsersFromDB(user.id)}
-                          title="Deletar"
-                        >
-                          <TrashIcon className="w-6 h-6" />
-                        </button>
-                        <button title="Atualizar">
-                          <PencilIcon className="w-6 h-6" />
-                        </button>
-                      </div>
-                    </td>
+                    <Dialog.Root>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-end gap-4">
+                          <button
+                            onClick={() => deleteUser(user.id)}
+                            title="Deletar"
+                          >
+                            <TrashIcon className="w-6 h-6" />
+                          </button>
+                          <Dialog.Trigger>
+                            <PencilIcon className="w-6 h-6" />
+                          </Dialog.Trigger>
+                        </div>
+                      </td>
+                      <NewUserModal />
+                    </Dialog.Root>
                   </tr>
                 )
               })}

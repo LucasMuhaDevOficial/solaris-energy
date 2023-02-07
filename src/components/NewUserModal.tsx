@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast, ToastContainer } from 'react-toastify'
 
-import { XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { useUsers } from '../hooks/useUsers'
@@ -38,7 +38,7 @@ interface Address {
 }
 
 export function NewUserModal() {
-  const { states, createUsers, users, isFetched } = useUsers()
+  const { states, createUsers, users } = useUsers()
 
   const {
     register,
@@ -58,7 +58,7 @@ export function NewUserModal() {
   const cpfValue = watch('cpf', '')
 
   function onSubmit(data: NewUserModalFields) {
-    const existingCpfUser = users.find((user) => user.cpf === cpfValue)
+    const existingCpfUser = users.some((user) => user.cpf === cpfValue)
 
     if (existingCpfUser) {
       toast.warn('Já existe um usuário com esse CPF!')

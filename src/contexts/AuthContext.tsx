@@ -54,8 +54,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email: email,
       }
 
-      console.log(userData)
-
       setUser(userData)
       localStorage.setItem(USERS_COLLECTION, JSON.stringify(userData))
     } catch (error) {
