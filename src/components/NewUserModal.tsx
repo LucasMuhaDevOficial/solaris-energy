@@ -14,10 +14,10 @@ import {
   removeMask,
 } from '../utils/maskInputs'
 
-interface NewUserModalFields {
+export interface NewUserModalFields {
   name: string
   cpf: string
-  phoneNumber: string
+  phone: string
   email: string
   zipcode: string
   state: string
@@ -47,7 +47,7 @@ export function NewUserModal() {
     reset()
   }
 
-  const phoneValue = watch('phoneNumber', '')
+  const phoneValue = watch('phone', '')
   const zipCodeValue = watch('zipcode', '')
   const cpfValue = watch('cpf', '')
 
@@ -73,7 +73,7 @@ export function NewUserModal() {
   }, [setValue, zipCodeValue])
 
   useEffect(() => {
-    setValue('phoneNumber', maskPhoneNumber(phoneValue))
+    setValue('phone', maskPhoneNumber(phoneValue))
     setValue('cpf', maskCpfNumber(cpfValue))
   }, [setValue, phoneValue, cpfValue])
 
@@ -134,7 +134,7 @@ export function NewUserModal() {
                 id="phone-number"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="(00) 00000-0000"
-                {...register('phoneNumber')}
+                {...register('phone')}
               />
             </div>
 
