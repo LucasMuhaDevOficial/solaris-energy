@@ -317,14 +317,7 @@ export function NewUserModal() {
               type="submit"
               className="flex justify-center px-8 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:border-orange-500"
             >
-              {isFetched ? (
-                <ArrowPathIcon
-                  color="#fff"
-                  className="h-5 animate-spin w-h-5"
-                />
-              ) : (
-                'Salvar'
-              )}
+              Salvar
             </button>
           </div>
         </form>

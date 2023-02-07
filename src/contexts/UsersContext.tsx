@@ -56,16 +56,12 @@ export function UsersProvider({ children }: UsersProviderProps) {
 
   async function createUsers(data: IUsers) {
     try {
-      setIsFetched(true)
-
       const userCollectionRef = collection(db, 'users')
       const user = await addDoc(userCollectionRef, data)
 
       setUsers((prevState) => [...prevState, data])
     } catch (error) {
       console.log(error)
-    } finally {
-      setIsFetched(false)
     }
   }
 
