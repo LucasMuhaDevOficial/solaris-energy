@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast, ToastContainer } from 'react-toastify'
 
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
-import { useUsers } from '../hooks/useUsers'
-import { apiZipCode } from '../libs/axios'
-import { capitalizeString } from '../utils/capitalizeString'
+import { useUsers } from '../../../hooks/useUsers'
+import { apiZipCode } from '../../../libs/axios'
+import { capitalizeString } from '../../../utils/capitalizeString'
+import { dateFormatter } from '../../../utils/dateFormatter'
 import {
   maskCpfNumber,
   maskPhoneNumber,
   maskZipCode,
   removeMask,
-} from '../utils/maskInputs'
+} from '../../../utils/maskInputs'
 
-interface UpdateUserModalFields {
+interface NewUserModalFields {
   name: string
   cpf: string
   phone: string
@@ -37,33 +38,38 @@ interface Address {
   bairro: string
 }
 
-export function UpdateUserModal() {
-  const { states, formData } = useUsers()
+export function NewUserModal() {
+  const { states, createUser, users, isCreated } = useUsers()
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    setValue,
-    formState: { isSubmitSuccessful },
-  } = useForm<UpdateUserModalFields>({
-    defaultValues: formData,
-  })
+  const { register, handleSubmit, reset, watch, setValue } =
+    useForm<NewUserModalFields>({
+      defaultValues: {
+        state: 'CE',
+      },
+    })
 
   const phoneValue = watch('phone', '')
   const zipCodeValue = watch('zipcode', '')
   const cpfValue = watch('cpf', '')
 
-  function onSubmit(data: UpdateUserModalFields) {
-    console.log(data)
+  function onCreate(data: NewUserModalFields) {
+    const existingCpfUser = users.some((user) => user.cpf === cpfValue)
+
+    if (existingCpfUser) {
+      toast.warn('Já existe um usuário com esse CPF!')
+      return
+    }
+
+    createUser({
+      id: crypto.randomUUID(),
+      created_at: dateFormatter(new Date()),
+      ...data,
+    })
+
+    toast.success('Usuário cadastrado com sucesso!')
 
     reset()
   }
-
-  useEffect(() => {
-    reset(formData)
-  }, [formData, reset])
 
   useEffect(() => {
     async function handleCepNumber(zipCode: string) {
@@ -104,7 +110,7 @@ export function UpdateUserModal() {
         </Dialog.Close>
 
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onCreate)}
           className="flex flex-col gap-4 mt-8"
         >
           <div className="grid grid-cols-6 gap-6">
@@ -292,7 +298,14 @@ export function UpdateUserModal() {
               type="submit"
               className="flex justify-center px-8 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:border-orange-500"
             >
-              Atualizar
+              {isCreated ? (
+                <ArrowPathIcon
+                  color="#fff"
+                  className="h-6 animate-spin w-h-6"
+                />
+              ) : (
+                'Salvar'
+              )}
             </button>
           </div>
         </form>

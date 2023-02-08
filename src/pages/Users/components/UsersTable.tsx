@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { BigHead } from '@bigheads/core'
 import {
@@ -8,12 +9,12 @@ import {
 } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
-import { useUsers } from '../hooks/useUsers'
-import { Loading } from './Loading'
+import { Loading } from '../../../components/Loading'
+import { useUsers } from '../../../hooks/useUsers'
 import { UpdateUserModal } from './UpdateUserModal'
 
 export function UsersTable() {
-  const { users, isFetched, deleteUser, getFormDataForUpdate } = useUsers()
+  const { users, deleteUser, getFormDataForUpdate } = useUsers()
 
   function handleDeleteUser(userId: string) {
     deleteUser(userId)

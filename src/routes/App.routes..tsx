@@ -4,7 +4,7 @@ import { DefaultLayout } from '../layouts/DefaultLayout'
 import { NotFound } from '../pages/NotFound'
 import { Projects } from '../pages/Projects'
 import { SignIn } from '../pages/SignIn'
-import { Users } from '../pages/Users'
+import { Users } from '../pages/Users/index'
 
 import { PrivateRoutes } from './Private.routes'
 

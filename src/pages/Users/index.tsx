@@ -1,11 +1,9 @@
-import { useEffect } from 'react'
-
 import { PlusIcon } from '@heroicons/react/24/solid'
 import * as Dialog from '@radix-ui/react-dialog'
 
-import { NewUserModal } from '../components/NewUserModal'
-import { UsersTable } from '../components/UsersTable'
-import { useUsers } from '../hooks/useUsers'
+import { useUsers } from '../../hooks/useUsers'
+import { NewUserModal } from './components/NewUserModal'
+import { UsersTable } from './components/UsersTable'
 
 export function Users() {
   const { isFetched } = useUsers()

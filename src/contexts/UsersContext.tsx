@@ -9,6 +9,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from 'firebase/firestore'
 
 import { apiStates } from '../libs/axios'
@@ -17,13 +18,15 @@ import { db } from '../services/firebase'
 interface UsersContextType {
   states: IStates[]
   users: IUsers[]
-  setUsers: Dispatch<SetStateAction<IUsers[]>>
+  formData: IUsers | undefined
+  setFormData: Dispatch<SetStateAction<IUsers | undefined>>
   isFetched: boolean
   isCreated: boolean
-  formData: IUsers | undefined
+  isUpdate: boolean
   getUsers: () => void
   deleteUser: (userId: string) => void
-  createUsers: (data: IUsers) => Promise<void>
+  createUser: (data: IUsers) => Promise<void>
+  updateUser: (modifiedObject: IUsers, userId: string) => void
   getFormDataForUpdate: (userId: string) => void
 }
 
@@ -60,15 +63,33 @@ export function UsersProvider({ children }: UsersProviderProps) {
   const [users, setUsers] = useState<IUsers[]>([])
   const [isFetched, setIsFetched] = useState(false)
   const [isCreated, setIsCreated] = useState(false)
+  const [isUpdate, setIsUpdate] = useState(false)
   const [formData, setFormData] = useState<IUsers>()
 
   function getFormDataForUpdate(userId: string) {
+    setIsUpdate(true)
+
     const userData = users.find((user) => user.id === userId)
 
     setFormData(userData)
   }
 
-  async function createUsers(data: IUsers) {
+  function getUsers() {
+    const q = query(collection(db, 'users'), orderBy('created_at', 'desc'))
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const updatedUsers = querySnapshot.docs.map((doc) => {
+        const data = { ...doc.data(), id: doc.id } as IUsers
+
+        return data
+      })
+
+      setIsFetched(false)
+
+      setUsers(updatedUsers)
+    })
+  }
+
+  async function createUser(data: IUsers) {
     try {
       setIsCreated(true)
 
@@ -91,33 +112,23 @@ export function UsersProvider({ children }: UsersProviderProps) {
     }
   }
 
-  function getUsers() {
-    const q = query(collection(db, 'users'), orderBy('created_at', 'desc'))
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const updatedUsers = querySnapshot.docs.map((doc) => {
-        const data = { ...doc.data(), id: doc.id } as IUsers
-
-        return data
-      })
-
-      setIsFetched(false)
-
-      if (updatedUsers !== null) {
-        setUsers(updatedUsers)
-      } else {
-        setUsers([])
-      }
-    })
+  async function updateUser(modifiedObject: IUsers, userId: string) {
+    try {
+      const userToUpdate = doc(db, 'users', userId)
+      await updateDoc(userToUpdate, { ...modifiedObject })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  async function handleStatesApi() {
+  async function fetchStates() {
     const response = await apiStates.get('/estados')
 
     setStates(response.data)
   }
 
   useEffect(() => {
-    handleStatesApi()
+    fetchStates()
     getUsers()
   }, [])
 
@@ -126,13 +137,15 @@ export function UsersProvider({ children }: UsersProviderProps) {
       value={{
         states,
         users,
-        setUsers,
         formData,
+        setFormData,
         isFetched,
         isCreated,
+        isUpdate,
         getUsers,
         deleteUser,
-        createUsers,
+        createUser,
+        updateUser,
         getFormDataForUpdate,
       }}
     >
