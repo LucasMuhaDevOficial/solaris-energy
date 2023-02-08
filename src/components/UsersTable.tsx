@@ -10,25 +10,19 @@ import * as Dialog from '@radix-ui/react-dialog'
 
 import { useUsers } from '../hooks/useUsers'
 import { Loading } from './Loading'
-import { NewUserModal } from './NewUserModal'
+import { UpdateUserModal } from './UpdateUserModal'
 
 export function UsersTable() {
-  const { users, isFetched, deleteUser } = useUsers()
+  const { users, isFetched, deleteUser, getFormDataForUpdate } = useUsers()
+
+  function handleDeleteUser(userId: string) {
+    deleteUser(userId)
+  }
 
   return (
     <>
-      {isFetched ? (
+      {users.length === 0 ? (
         <Loading />
-      ) : users.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 py-28">
-          <ExclamationCircleIcon className="w-16 h-16 text-orange-500" />
-          <div className="flex flex-col items-center">
-            <strong className="text-orange-500">
-              Sem usuários no momento!
-            </strong>
-            <span>Cadastre um agora clicando no botão acima.</span>
-          </div>
-        </div>
       ) : (
         <div className="mt-5 overflow-hidden overflow-x-auto border border-gray-200 rounded-lg shadow-md">
           <table className="w-full text-sm text-left text-gray-500 bg-white">
@@ -77,17 +71,19 @@ export function UsersTable() {
                       <td className="px-6 py-4">
                         <div className="flex justify-end gap-4">
                           <button
-                            onClick={() => deleteUser(user.id)}
+                            onClick={() => handleDeleteUser(user.id)}
                             title="Deletar"
                           >
                             <TrashIcon className="w-6 h-6" />
                           </button>
-                          <Dialog.Trigger>
+                          <Dialog.Trigger
+                            onClick={() => getFormDataForUpdate(user.id)}
+                          >
                             <PencilIcon className="w-6 h-6" />
                           </Dialog.Trigger>
                         </div>
                       </td>
-                      <NewUserModal />
+                      <UpdateUserModal />
                     </Dialog.Root>
                   </tr>
                 )
