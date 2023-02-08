@@ -22,7 +22,7 @@ export function ProjectsTable() {
                   Cliente
                 </th>
                 <th scope="col" className="px-6 py-4 font-medium text-white">
-                  Potência (Wp)
+                  Potência (kWp)
                 </th>
                 <th scope="col" className="px-6 py-4 font-medium text-white">
                   CEP
@@ -53,7 +53,9 @@ export function ProjectsTable() {
                         </div>
                       </div>
                     </th>
-                    <td className="px-6 py-4 w-[213px]">{project.power}</td>
+                    <td className="px-6 py-4 w-[213px]">
+                      {(project.power / 1000).toFixed(2)}
+                    </td>
                     <td className="px-6 py-4">{project.zipcode}</td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">{project.phone}</div>

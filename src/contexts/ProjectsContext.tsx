@@ -1,6 +1,12 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react'
 
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from 'firebase/firestore'
 
 import { apiStates } from '../libs/axios'
 import { db } from '../services/firebase'
@@ -8,6 +14,7 @@ import { db } from '../services/firebase'
 interface ProjectsContextType {
   states: IStates[]
   projects: IProjects[]
+  createUser: (data: IProjects) => void
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextType)
@@ -55,6 +62,15 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
     })
   }
 
+  async function createUser(data: IProjects) {
+    try {
+      const userCollectionRef = collection(db, 'projects')
+      await addDoc(userCollectionRef, data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async function fetchStates() {
     const response = await apiStates.get('/estados')
 
@@ -67,7 +83,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   }, [])
 
   return (
-    <ProjectsContext.Provider value={{ states, projects }}>
+    <ProjectsContext.Provider value={{ states, projects, createUser }}>
       {children}
     </ProjectsContext.Provider>
   )
