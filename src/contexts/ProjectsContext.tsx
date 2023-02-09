@@ -130,12 +130,10 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   }
 
   async function updateProject(data: IProjects, userId: string) {
-    try {
-      const userToUpdate = doc(db, 'projects', userId)
-      await updateDoc(userToUpdate, { ...data })
-    } catch (error) {
-      console.log(error)
-    }
+    const { id, ...dataWithoutId } = data
+
+    const userToUpdate = doc(db, 'projects', userId)
+    await updateDoc(userToUpdate, { ...dataWithoutId })
   }
 
   async function orderProjectByState(stateName: string) {

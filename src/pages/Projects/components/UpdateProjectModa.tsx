@@ -38,14 +38,13 @@ interface Address {
 }
 
 export function UpdateProjectModal() {
-  const { states, formData, updateProject, setFormData, getProjects } =
-    useProjects()
+  const { states, formData, updateProject } = useProjects()
 
   const { register, handleSubmit, reset, watch, setValue } =
     useForm<NewProjectModalFields>({})
 
-  const phoneValue = watch('phone', '')
-  const zipCodeValue = watch('zipcode', '')
+  const phoneValue = watch('phone')
+  const zipCodeValue = watch('zipcode')
 
   function onUpdate(data: NewProjectModalFields) {
     if (formData) {
@@ -60,9 +59,6 @@ export function UpdateProjectModal() {
     }
 
     toast.success('Usuário atualizado com sucesso')
-
-    reset({})
-    setFormData(undefined)
   }
 
   useEffect(() => {
@@ -71,7 +67,7 @@ export function UpdateProjectModal() {
 
   useEffect(() => {
     async function handleCepNumber(zipCode: string) {
-      setValue('zipcode', maskZipCode(zipCodeValue))
+      setValue('zipcode', maskZipCode(zipCode))
 
       if (removeMask(zipCode).length === 8) {
         const response = await apiZipCode.get(`/${zipCode}/json`)
@@ -89,10 +85,6 @@ export function UpdateProjectModal() {
 
     handleCepNumber(zipCodeValue)
   }, [setValue, zipCodeValue])
-
-  useEffect(() => {
-    setValue('phone', maskPhoneNumber(phoneValue))
-  }, [setValue, phoneValue])
 
   return (
     <Dialog.Portal>
