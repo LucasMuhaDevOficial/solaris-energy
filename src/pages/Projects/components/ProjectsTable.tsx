@@ -1,15 +1,25 @@
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { TrashIcon } from '@heroicons/react/24/outline'
 
+import { EmptyProject } from '../../../components/EmptyProject'
 import { Loading } from '../../../components/Loading'
 import { useProjects } from '../../../hooks/useProjects'
 
 export function ProjectsTable() {
-  const { projects } = useProjects()
+  const { projects, deleteProject, isFetched, isEmpty } = useProjects()
+
+  function handleDeleteProject(projectId: string) {
+    deleteProject(projectId)
+  }
 
   return (
     <>
-      {projects.length === 0 ? (
+      {isFetched ? (
+        <EmptyProject
+          title="Sem projetos cadastrados nesse momento!"
+          btnIsVisible={false}
+        />
+      ) : projects.length === 0 ? (
         <div className="py-28">
           <Loading />
         </div>
@@ -62,7 +72,10 @@ export function ProjectsTable() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex justify-end gap-4">
-                        <button>
+                        <button
+                          onClick={() => handleDeleteProject(project.id)}
+                          title="Deletar"
+                        >
                           <TrashIcon className="w-6 h-6" />
                         </button>
                         <button>

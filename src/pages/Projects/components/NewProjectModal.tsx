@@ -2,7 +2,11 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast, ToastContainer } from 'react-toastify'
 
-import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowPathIcon,
+  CloudArrowUpIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { useProjects } from '../../../hooks/useProjects'
@@ -38,7 +42,7 @@ interface Address {
 }
 
 export function NewProjectModal() {
-  const { states, createUser } = useProjects()
+  const { states, createProject, isCreated } = useProjects()
 
   const { handleSubmit, register, watch, setValue, reset } =
     useForm<NewProjectModalFields>()
@@ -47,13 +51,13 @@ export function NewProjectModal() {
   const zipCodeValue = watch('zipcode', '')
 
   function onCreate(data: NewProjectModalFields) {
-    createUser({
+    createProject({
       id: crypto.randomUUID(),
       created_at: dateFormatter(new Date()),
       ...data,
     })
 
-    toast.success('Usuário cadastrado com sucesso!')
+    toast.success('Projeto cadastrado com sucesso!')
 
     reset()
   }
@@ -311,7 +315,14 @@ export function NewProjectModal() {
               type="submit"
               className="flex justify-center px-8 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:border-orange-500"
             >
-              Salvar
+              {isCreated ? (
+                <ArrowPathIcon
+                  color="#fff"
+                  className="h-6 animate-spin w-h-6"
+                />
+              ) : (
+                'Salvar'
+              )}
             </button>
           </div>
         </form>
