@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 
 import {
   addDoc,
@@ -8,6 +15,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore'
 
@@ -17,13 +25,17 @@ import { db } from '../services/firebase'
 interface ProjectsContextType {
   states: IStates[]
   projects: IProjects[]
+  formData: IProjects | undefined
   isCreated: boolean
   isFetched: boolean
   isEmpty: boolean
+  setFormData: Dispatch<SetStateAction<IProjects | undefined>>
   getProjects: () => void
   createProject: (data: IProjects) => void
   deleteProject: (projectId: string) => void
+  updateProject: (data: IProjects, userId: string) => void
   orderProjectByState: (stateName: string) => void
+  getFormDataForUpdate: (projectId: string) => void
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextType)
@@ -60,6 +72,13 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [isCreated, setIsCreated] = useState(false)
   const [isFetched, setIsFetched] = useState(false)
   const [isEmpty, setIsEmpty] = useState(false)
+  const [formData, setFormData] = useState<IProjects>()
+
+  function getFormDataForUpdate(userId: string) {
+    const projectData = projects.find((project) => project.id === userId)
+
+    setFormData(projectData)
+  }
 
   function getProjects() {
     try {
@@ -108,6 +127,15 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
     }
   }
 
+  async function updateProject(data: IProjects, userId: string) {
+    try {
+      const userToUpdate = doc(db, 'projects', userId)
+      await updateDoc(userToUpdate, { ...data })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async function orderProjectByState(stateName: string) {
     const q = query(collection(db, 'projects'), where('state', '==', stateName))
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -139,13 +167,17 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
       value={{
         states,
         projects,
+        formData,
+        isCreated,
+        isFetched,
+        isEmpty,
+        setFormData,
         createProject,
         deleteProject,
         getProjects,
         orderProjectByState,
-        isCreated,
-        isFetched,
-        isEmpty,
+        updateProject,
+        getFormDataForUpdate,
       }}
     >
       {children}

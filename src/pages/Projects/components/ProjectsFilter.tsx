@@ -22,14 +22,14 @@ export function ProjectsFilter() {
 
   useEffect(() => {
     setSelected(states[0])
-  }, [states, getProjects])
+  }, [states])
 
   return (
     <div className="w-full md:w-60">
       <Listbox
         value={selected}
         onChange={(state) => {
-          setSelected(state), handleOrderProjectByState(state?.sigla)
+          setSelected(state), handleOrderProjectByState(state.sigla)
         }}
       >
         {({ open }) => (

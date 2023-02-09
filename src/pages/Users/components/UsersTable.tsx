@@ -76,24 +76,24 @@ export function UsersTable() {
                     <td className="px-6 py-4">
                       <div className="flex gap-2">{user.phone}</div>
                     </td>
-                    <Dialog.Root>
-                      <td className="px-6 py-4">
-                        <div className="flex justify-end gap-4">
-                          <button
-                            onClick={() => handleDeleteUser(user.id)}
-                            title="Deletar"
-                          >
-                            <TrashIcon className="w-6 h-6" />
-                          </button>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-end gap-4">
+                        <button
+                          onClick={() => handleDeleteUser(user.id)}
+                          title="Deletar"
+                        >
+                          <TrashIcon className="w-6 h-6" />
+                        </button>
+                        <Dialog.Root>
                           <Dialog.Trigger
                             onClick={() => getFormDataForUpdate(user.id)}
                           >
                             <PencilIcon className="w-6 h-6" />
                           </Dialog.Trigger>
-                        </div>
-                      </td>
-                      <UpdateUserModal />
-                    </Dialog.Root>
+                          <UpdateUserModal />
+                        </Dialog.Root>
+                      </div>
+                    </td>
                   </tr>
                 )
               })}

@@ -1,12 +1,15 @@
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import * as Dialog from '@radix-ui/react-dialog'
 
 import { Empty } from '../../../components/Empty'
 import { Loading } from '../../../components/Loading'
 import { useProjects } from '../../../hooks/useProjects'
+import { UpdateProjectModal } from './UpdateProjectModa'
 
 export function ProjectsTable() {
-  const { projects, deleteProject, isEmpty } = useProjects()
+  const { projects, deleteProject, getFormDataForUpdate, isEmpty } =
+    useProjects()
 
   function handleDeleteProject(projectId: string) {
     deleteProject(projectId)
@@ -78,9 +81,15 @@ export function ProjectsTable() {
                         >
                           <TrashIcon className="w-6 h-6" />
                         </button>
-                        <button>
-                          <PencilIcon className="w-6 h-6" />
-                        </button>
+                        <Dialog.Root>
+                          <Dialog.Trigger
+                            title="Atualizar"
+                            onClick={() => getFormDataForUpdate(project.id)}
+                          >
+                            <PencilIcon className="w-6 h-6" />
+                          </Dialog.Trigger>
+                          <UpdateProjectModal />
+                        </Dialog.Root>
                       </div>
                     </td>
                   </tr>
