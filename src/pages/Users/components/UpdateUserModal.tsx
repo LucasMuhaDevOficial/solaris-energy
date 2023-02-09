@@ -8,6 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useUsers } from '../../../hooks/useUsers'
 import { apiZipCode } from '../../../libs/axios'
 import { capitalizeString } from '../../../utils/capitalizeString'
+import { dateFormatter } from '../../../utils/dateFormatter'
 import {
   maskCpfNumber,
   maskPhoneNumber,
@@ -56,18 +57,18 @@ export function UpdateUserModal() {
   function onUpdate(data: UpdateUserModalFields) {
     console.log(data)
 
-    // if (formData) {
-    //   updateUser(
-    //     {
-    //       id: crypto.randomUUID(),
-    //       created_at: dateFormatter(new Date()),
-    //       ...data,
-    //     },
-    //     formData?.id
-    //   )
-    // }
+    if (formData) {
+      updateUser(
+        {
+          id: crypto.randomUUID(),
+          created_at: dateFormatter(new Date()),
+          ...data,
+        },
+        formData?.id
+      )
+    }
 
-    // toast.success('Usuário cadastrado com sucesso')
+    toast.success('Usuário atualizado com sucesso')
 
     reset({})
     setFormData(undefined)

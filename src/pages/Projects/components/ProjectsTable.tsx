@@ -6,8 +6,7 @@ import { Loading } from '../../../components/Loading'
 import { useProjects } from '../../../hooks/useProjects'
 
 export function ProjectsTable() {
-  const { projects, deleteProject, getProjects, isFetched, isEmpty } =
-    useProjects()
+  const { projects, deleteProject, isEmpty } = useProjects()
 
   function handleDeleteProject(projectId: string) {
     deleteProject(projectId)
@@ -15,23 +14,15 @@ export function ProjectsTable() {
 
   return (
     <>
-      {isFetched ? (
+      {isEmpty ? (
         <Empty
           title="Sem projetos cadastrados nesse momento!"
           btnIsVisible={false}
         />
       ) : projects.length === 0 ? (
-        !isEmpty ? (
-          <Empty
-            title="Sem projetos cadastrados nesse estado!"
-            btnIsVisible={true}
-            onClickFn={getProjects}
-          />
-        ) : (
-          <div className="py-28">
-            <Loading />
-          </div>
-        )
+        <div className="py-28">
+          <Loading />
+        </div>
       ) : (
         <div className="mt-5 overflow-hidden overflow-x-auto border border-gray-200 rounded-lg shadow-md ">
           <table className="w-full text-sm text-left text-gray-500 bg-white">

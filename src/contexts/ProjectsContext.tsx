@@ -72,12 +72,12 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
         })
 
         if (updatedProjects.length === 0) {
-          return setIsFetched(true)
+          return setIsEmpty(true)
         }
 
         setProjects(updatedProjects)
 
-        setIsFetched(false)
+        setIsEmpty(false)
       })
     } catch (error) {
       console.log(error)
@@ -114,16 +114,12 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
       const updatedProjectsOrdered = querySnapshot.docs.map((doc) => {
         const data = { ...doc.data(), id: doc.id } as IProjects
 
+        console.log(data)
+
         return data
       })
 
-      if (updatedProjectsOrdered) {
-        setIsEmpty(true)
-        setProjects([])
-      }
-
       setProjects(updatedProjectsOrdered)
-      setIsEmpty(false)
     })
   }
 

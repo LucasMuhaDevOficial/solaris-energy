@@ -13,7 +13,7 @@ interface IStates {
 }
 
 export function ProjectsFilter() {
-  const { states, orderProjectByState } = useProjects()
+  const { states, orderProjectByState, getProjects } = useProjects()
   const [selected, setSelected] = useState<IStates>()
 
   function handleOrderProjectByState(stateName: string) {
@@ -22,14 +22,14 @@ export function ProjectsFilter() {
 
   useEffect(() => {
     setSelected(states[0])
-  }, [states])
+  }, [states, getProjects])
 
   return (
     <div className="w-full md:w-60">
       <Listbox
         value={selected}
         onChange={(state) => {
-          setSelected(state), handleOrderProjectByState(state.sigla)
+          setSelected(state), handleOrderProjectByState(state?.sigla)
         }}
       >
         {({ open }) => (
