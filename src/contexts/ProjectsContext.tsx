@@ -133,7 +133,7 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
     const { id, ...dataWithoutId } = data
 
     const userToUpdate = doc(db, 'projects', userId)
-    await updateDoc(userToUpdate, { ...dataWithoutId })
+    await updateDoc(userToUpdate, dataWithoutId)
   }
 
   async function orderProjectByState(stateName: string) {
