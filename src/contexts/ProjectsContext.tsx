@@ -24,7 +24,7 @@ import { db } from '../services/firebase'
 
 interface ProjectsContextType {
   states: IStates[]
-  projects: IProjects[]
+  projects: IProjects[] | null
   formData: IProjects | undefined
   isCreated: boolean
   isFetched: boolean
@@ -68,16 +68,17 @@ interface IProjects {
 
 export function ProjectsProvider({ children }: ProjectsProviderProps) {
   const [states, setStates] = useState<IStates[]>([])
-  const [projects, setProjects] = useState<IProjects[]>([])
+  const [projects, setProjects] = useState<IProjects[] | null>([])
   const [isCreated, setIsCreated] = useState(false)
   const [isFetched, setIsFetched] = useState(false)
   const [isEmpty, setIsEmpty] = useState(false)
   const [formData, setFormData] = useState<IProjects>()
 
   function getFormDataForUpdate(userId: string) {
-    const projectData = projects.find((project) => project.id === userId)
-
-    setFormData(projectData)
+    if (projects) {
+      const projectData = projects.find((project) => project.id === userId)
+      setFormData(projectData)
+    }
   }
 
   function getProjects() {
@@ -91,7 +92,8 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
         })
 
         if (updatedProjects.length === 0) {
-          return setIsEmpty(true)
+          setIsEmpty(true)
+          return
         }
 
         setProjects(updatedProjects)
@@ -142,10 +144,13 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
       const updatedProjectsOrdered = querySnapshot.docs.map((doc) => {
         const data = { ...doc.data(), id: doc.id } as IProjects
 
-        console.log(data)
-
         return data
       })
+
+      if (updatedProjectsOrdered.length === 0) {
+        setProjects(null)
+        return
+      }
 
       setProjects(updatedProjectsOrdered)
     })

@@ -8,8 +8,13 @@ import { useProjects } from '../../../hooks/useProjects'
 import { UpdateProjectModal } from './UpdateProjectModa'
 
 export function ProjectsTable() {
-  const { projects, deleteProject, getFormDataForUpdate, isEmpty } =
-    useProjects()
+  const {
+    projects,
+    deleteProject,
+    getFormDataForUpdate,
+    isEmpty,
+    getProjects,
+  } = useProjects()
 
   function handleDeleteProject(projectId: string) {
     deleteProject(projectId)
@@ -22,10 +27,15 @@ export function ProjectsTable() {
           title="Sem projetos cadastrados nesse momento!"
           btnIsVisible={false}
         />
-      ) : projects.length === 0 ? (
+      ) : projects?.length === 0 ? (
         <div className="py-28">
           <Loading />
         </div>
+      ) : projects === null ? (
+        <Empty
+          title="Sem projetos cadastrados nesse estado no momento!"
+          onClickFn={getProjects}
+        />
       ) : (
         <div className="mt-5 overflow-hidden overflow-x-auto border border-gray-200 rounded-lg shadow-md ">
           <table className="w-full text-sm text-left text-gray-500 bg-white">
@@ -49,7 +59,7 @@ export function ProjectsTable() {
                 ></th>
               </tr>
             </thead>
-            {projects.map((project) => {
+            {projects?.map((project) => {
               return (
                 <tbody
                   key={project.id}
