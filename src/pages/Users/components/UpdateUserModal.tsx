@@ -130,6 +130,7 @@ export function UpdateUserModal() {
               </label>
               <input
                 type="text"
+                id="name"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="Simon Wenberg"
                 {...register('name')}
@@ -154,14 +155,14 @@ export function UpdateUserModal() {
 
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="phone-number"
+                htmlFor="phone"
                 className="block text-sm font-medium text-gray-700"
               >
                 Telefone:
               </label>
               <input
                 type="text"
-                id="phone-number"
+                id="phone"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="(00) 00000-0000"
                 {...register('phone')}
@@ -193,6 +194,7 @@ export function UpdateUserModal() {
               </label>
               <input
                 type="text"
+                id="zipcode"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="00000-000"
                 {...register('zipcode')}
@@ -201,7 +203,7 @@ export function UpdateUserModal() {
 
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="city"
+                htmlFor="state"
                 className="block text-sm font-medium text-gray-700"
               >
                 Estado:

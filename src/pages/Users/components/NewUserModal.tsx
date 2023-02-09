@@ -123,9 +123,11 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
+                id="name"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="Simon Wenberg"
                 {...register('name')}
+                required
               />
             </div>
 
@@ -142,22 +144,24 @@ export function NewUserModal() {
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="000.000.000-00"
                 {...register('cpf')}
+                required
               />
             </div>
 
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="phone-number"
+                htmlFor="phone"
                 className="block text-sm font-medium text-gray-700"
               >
                 Telefone:
               </label>
               <input
                 type="text"
-                id="phone-number"
+                id="phone"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="(00) 00000-0000"
                 {...register('phone')}
+                required
               />
             </div>
 
@@ -174,6 +178,7 @@ export function NewUserModal() {
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="simon@gmail.com"
                 {...register('email')}
+                required
               />
             </div>
 
@@ -186,15 +191,17 @@ export function NewUserModal() {
               </label>
               <input
                 type="text"
+                id="zipcode"
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="00000-000"
                 {...register('zipcode')}
+                required
               />
             </div>
 
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="city"
+                htmlFor="state"
                 className="block text-sm font-medium text-gray-700"
               >
                 Estado:
