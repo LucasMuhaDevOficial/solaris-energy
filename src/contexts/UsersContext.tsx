@@ -20,9 +20,9 @@ interface UsersContextType {
   users: IUsers[]
   formData: IUsers | undefined
   setFormData: Dispatch<SetStateAction<IUsers | undefined>>
-  isFetched: boolean
   isCreated: boolean
   isUpdate: boolean
+  isEmpty: boolean
   getUsers: () => void
   deleteUser: (userId: string) => void
   createUser: (data: IUsers) => Promise<void>
@@ -61,8 +61,8 @@ interface IUsers {
 export function UsersProvider({ children }: UsersProviderProps) {
   const [states, setStates] = useState<IStates[]>([])
   const [users, setUsers] = useState<IUsers[]>([])
-  const [isFetched, setIsFetched] = useState(false)
   const [isCreated, setIsCreated] = useState(false)
+  const [isEmpty, setIsEmpty] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
   const [formData, setFormData] = useState<IUsers>()
 
@@ -83,9 +83,13 @@ export function UsersProvider({ children }: UsersProviderProps) {
         return data
       })
 
-      setIsFetched(false)
+      if (updatedUsers.length === 0) {
+        setIsEmpty(true)
+        return
+      }
 
       setUsers(updatedUsers)
+      setIsEmpty(false)
     })
   }
 
@@ -139,9 +143,9 @@ export function UsersProvider({ children }: UsersProviderProps) {
         users,
         formData,
         setFormData,
-        isFetched,
         isCreated,
         isUpdate,
+        isEmpty,
         getUsers,
         deleteUser,
         createUser,

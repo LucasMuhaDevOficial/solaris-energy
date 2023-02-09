@@ -9,12 +9,13 @@ import {
 } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
+import { Empty } from '../../../components/Empty'
 import { Loading } from '../../../components/Loading'
 import { useUsers } from '../../../hooks/useUsers'
 import { UpdateUserModal } from './UpdateUserModal'
 
 export function UsersTable() {
-  const { users, deleteUser, getFormDataForUpdate } = useUsers()
+  const { users, deleteUser, getFormDataForUpdate, isEmpty } = useUsers()
 
   function handleDeleteUser(userId: string) {
     deleteUser(userId)
@@ -22,8 +23,15 @@ export function UsersTable() {
 
   return (
     <>
-      {users.length === 0 ? (
-        <Loading />
+      {isEmpty ? (
+        <Empty
+          title="Sem usuários cadastrados no momento!"
+          btnIsVisible={false}
+        />
+      ) : users.length === 0 ? (
+        <div className="py-28">
+          <Loading />
+        </div>
       ) : (
         <div className="mt-5 overflow-hidden overflow-x-auto border border-gray-200 rounded-lg shadow-md">
           <table className="w-full text-sm text-left text-gray-500 bg-white">

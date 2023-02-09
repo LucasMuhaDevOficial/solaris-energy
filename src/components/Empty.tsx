@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   InformationCircleIcon,
   ArrowSmallLeftIcon,
@@ -7,14 +5,12 @@ import {
 
 import { useProjects } from '../hooks/useProjects'
 
-interface EmptyProjectProps {
+interface EmptyProps {
   title: string
   btnIsVisible?: boolean
+  onClickFn?: () => void
 }
-export function EmptyProject({
-  title,
-  btnIsVisible = true,
-}: EmptyProjectProps) {
+export function Empty({ title, btnIsVisible = true, onClickFn }: EmptyProps) {
   const { getProjects } = useProjects()
 
   return (
@@ -29,7 +25,7 @@ export function EmptyProject({
           <button
             type="submit"
             className="flex items-center justify-center gap-4 px-8 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:border-orange-500"
-            onClick={getProjects}
+            onClick={onClickFn}
           >
             <ArrowSmallLeftIcon className="w-5 h-5" />
             Projetos
