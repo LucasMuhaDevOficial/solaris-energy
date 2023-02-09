@@ -69,9 +69,6 @@ export function UpdateUserModal() {
     }
 
     toast.success('Usuário atualizado com sucesso')
-
-    reset({})
-    setFormData(undefined)
   }
 
   useEffect(() => {
@@ -79,24 +76,7 @@ export function UpdateUserModal() {
   }, [formData, reset])
 
   useEffect(() => {
-    async function handleCepNumber(zipCode: string) {
-      setValue('zipcode', maskZipCode(zipCodeValue))
-
-      if (removeMask(zipCode).length === 8) {
-        const response = await apiZipCode.get(`/${zipCode}/json`)
-
-        const { complemento, localidade, logradouro, uf, bairro } =
-          response.data as Address
-
-        setValue('city', localidade)
-        setValue('neighborhood', bairro)
-        setValue('state', uf)
-        setValue('street', logradouro)
-        setValue('complement', capitalizeString(complemento))
-      }
-    }
-
-    handleCepNumber(zipCodeValue)
+    setValue('zipcode', maskZipCode(zipCodeValue))
   }, [setValue, zipCodeValue])
 
   useEffect(() => {

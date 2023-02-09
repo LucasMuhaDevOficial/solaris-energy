@@ -6,14 +6,8 @@ import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { useProjects } from '../../../hooks/useProjects'
-import { apiZipCode } from '../../../libs/axios'
-import { capitalizeString } from '../../../utils/capitalizeString'
 import { dateFormatter } from '../../../utils/dateFormatter'
-import {
-  maskPhoneNumber,
-  maskZipCode,
-  removeMask,
-} from '../../../utils/maskInputs'
+import { maskPhoneNumber, maskZipCode } from '../../../utils/maskInputs'
 
 interface NewProjectModalFields {
   client_name: string
@@ -38,13 +32,13 @@ interface Address {
 }
 
 export function UpdateProjectModal() {
-  const { states, formData, updateProject } = useProjects()
+  const { states, formData, updateProject, setFormData } = useProjects()
 
   const { register, handleSubmit, reset, watch, setValue } =
     useForm<NewProjectModalFields>({})
 
-  const phoneValue = watch('phone')
-  const zipCodeValue = watch('zipcode')
+  const zipCodeValue = watch('zipcode', '')
+  const phoneValue = watch('phone', '')
 
   function onUpdate(data: NewProjectModalFields) {
     if (formData) {
@@ -66,25 +60,12 @@ export function UpdateProjectModal() {
   }, [formData, reset])
 
   useEffect(() => {
-    async function handleCepNumber(zipCode: string) {
-      setValue('zipcode', maskZipCode(zipCode))
-
-      if (removeMask(zipCode).length === 8) {
-        const response = await apiZipCode.get(`/${zipCode}/json`)
-
-        const { complemento, localidade, logradouro, uf, bairro } =
-          response.data as Address
-
-        setValue('city', localidade)
-        setValue('neighborhood', bairro)
-        setValue('state', uf)
-        setValue('street', logradouro)
-        setValue('complement', capitalizeString(complemento))
-      }
-    }
-
-    handleCepNumber(zipCodeValue)
+    setValue('zipcode', maskZipCode(zipCodeValue))
   }, [setValue, zipCodeValue])
+
+  useEffect(() => {
+    setValue('phone', maskPhoneNumber(phoneValue))
+  }, [setValue, phoneValue])
 
   return (
     <Dialog.Portal>
