@@ -11,8 +11,6 @@ interface EmptyProps {
   onClickFn?: () => void
 }
 export function Empty({ title, btnIsVisible = true, onClickFn }: EmptyProps) {
-  const { getProjects } = useProjects()
-
   return (
     <div className="flex flex-col items-center gap-8 py-28">
       <InformationCircleIcon className="w-16 h-16 text-orange-500" />

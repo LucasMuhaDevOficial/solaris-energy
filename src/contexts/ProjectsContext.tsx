@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 
 import {
   addDoc,
@@ -109,30 +109,22 @@ export function ProjectsProvider({ children }: ProjectsProviderProps) {
   }
 
   async function orderProjectByState(stateName: string) {
-    try {
-      const q = query(
-        collection(db, 'projects'),
-        where('state', '==', stateName)
-      )
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const updatedProjectsOrdered = querySnapshot.docs.map((doc) => {
-          const data = { ...doc.data(), id: doc.id } as IProjects
+    const q = query(collection(db, 'projects'), where('state', '==', stateName))
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const updatedProjectsOrdered = querySnapshot.docs.map((doc) => {
+        const data = { ...doc.data(), id: doc.id } as IProjects
 
-          return data
-        })
-
-        if (updatedProjectsOrdered.length === 0) {
-          setIsEmpty(true)
-          return
-        }
-
-        setProjects(updatedProjectsOrdered)
-
-        setIsEmpty(false)
+        return data
       })
-    } catch (error) {
-      console.log(error)
-    }
+
+      if (updatedProjectsOrdered) {
+        setIsEmpty(true)
+        setProjects([])
+      }
+
+      setProjects(updatedProjectsOrdered)
+      setIsEmpty(false)
+    })
   }
 
   async function fetchStates() {
