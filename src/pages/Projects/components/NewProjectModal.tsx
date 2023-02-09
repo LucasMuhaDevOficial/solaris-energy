@@ -114,6 +114,7 @@ export function NewProjectModal() {
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="Simon Wenberg"
                 {...register('client_name')}
+                required
               />
             </div>
 
@@ -130,6 +131,7 @@ export function NewProjectModal() {
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="(00) 00000-0000"
                 {...register('phone')}
+                required
               />
             </div>
 
@@ -178,6 +180,7 @@ export function NewProjectModal() {
                 className="w-full p-1 mt-1 border-b-2 outline-none border-orange-500/50 focus:border-orange-500 placeholder:text-sm"
                 placeholder="00000-000"
                 {...register('zipcode')}
+                required
               />
             </div>
 

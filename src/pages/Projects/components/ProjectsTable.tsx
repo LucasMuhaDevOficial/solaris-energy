@@ -24,7 +24,7 @@ export function ProjectsTable() {
     <>
       {isEmpty ? (
         <Empty
-          title="Sem projetos cadastrados nesse momento!"
+          title="Sem projetos cadastrados no momento!"
           btnIsVisible={false}
         />
       ) : projects?.length === 0 ? (
