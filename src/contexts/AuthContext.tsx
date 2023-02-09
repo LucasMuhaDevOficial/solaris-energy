@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 
-import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 import { USERS_COLLECTION } from '../constants/storage'
 import { auth } from '../services/firebase'

@@ -6,14 +6,11 @@ import { ArrowPathIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { useUsers } from '../../../hooks/useUsers'
-import { apiZipCode } from '../../../libs/axios'
-import { capitalizeString } from '../../../utils/capitalizeString'
 import { dateFormatter } from '../../../utils/dateFormatter'
 import {
   maskCpfNumber,
   maskPhoneNumber,
   maskZipCode,
-  removeMask,
 } from '../../../utils/maskInputs'
 
 interface UpdateUserModalFields {

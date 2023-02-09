@@ -2,7 +2,6 @@ import { UserPlusIcon } from '@heroicons/react/24/outline'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { UsersProvider } from '../../contexts/UsersContext'
-import { useUsers } from '../../hooks/useUsers'
 import { NewUserModal } from './components/NewUserModal'
 import { UsersTable } from './components/UsersTable'
 
