@@ -4,13 +4,13 @@ import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCJ1Gz9URMIKS5Mi_vj2LDnCvyUL7Gy6CM',
-  authDomain: 'solariaenergy-dbca1.firebaseapp.com',
-  projectId: 'solariaenergy-dbca1',
-  storageBucket: 'solariaenergy-dbca1.appspot.com',
-  messagingSenderId: '672056652553',
-  appId: '1:672056652553:web:c5964c70a1d506c40319d8',
-  measurementId: 'G-W59VZ7MBM3',
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
 
 const app = initializeApp(firebaseConfig)
